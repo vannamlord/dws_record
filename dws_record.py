@@ -4,15 +4,6 @@ import datetime
 import time
 import threading
 # Read status of Tool on DWS
-try:
-    file = open('install_status.txt', 'a+')
-    if (file == '0'):
-        p = subprocess.call(
-            ['sh', './run.sh'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-        file.write('1')
-    file.close()
-except:
-    print('Check back file')
 ####################################################################################
 try:
     file1 = open('parameter.txt', 'r')
