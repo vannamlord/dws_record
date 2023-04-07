@@ -9,7 +9,6 @@ try:
     if (file == '0'):
         p = subprocess.call(
             ['sh', './run.sh'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-        print('Reset DWS')
         file.write('1')
     file.close()
 except:
