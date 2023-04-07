@@ -5,7 +5,7 @@ Exec=gnome-terminal --working-directory=/home/ubuntu/Desktop/dws_record/ -x bash
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
-Name[en_NG]=Terminal
-Name=Terminal
-Comment[en_NG]=Start Terminal On Startup
-Comment=Start Terminal On Startup
+Name[en_NG]=DWS_record
+Name=dws_record
+Comment[en_NG]=Auto run record
+Comment=Auto run record
