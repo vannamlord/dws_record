@@ -1,0 +1,11 @@
+#!/bin/bash
+[Desktop Entry]
+Type=Application
+Exec=gnome-terminal --working-directory=/home/ubuntu/Desktop/dws_record/ -x bash -c "python3 dws_record.py"
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_NG]=Terminal
+Name=Terminal
+Comment[en_NG]=Start Terminal On Startup
+Comment=Start Terminal On Startup
