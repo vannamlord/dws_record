@@ -1,0 +1,3 @@
+init_timer_enet = 180
+init_timer_space = 18000
+init_space = 10
