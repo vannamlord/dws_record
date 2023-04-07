@@ -4,6 +4,7 @@ lib:
         sudo apt install git
         git --version
         git clone <http>
+        
         speedtest-cli:
         sudo apt install speedtest-cli ; apt update;\
         sudo gzip -k9 /usr/lib/python3/dist-packages/speedtest.py; \
