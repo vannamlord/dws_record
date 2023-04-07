@@ -78,7 +78,7 @@ def Alarm_free_space():
         respone_space = p.stdout.decode("utf-8")
         available_space = respone_space.split('\n')[3].split('       ')[1].split('  ')[2]
         free_use = available_space.replace('G','')
-        free_use = int(free_use)
+        free_use = float(free_use)
         if(free_use <init_space):
             print('Disk in Alarm')
         else:
