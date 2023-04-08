@@ -17,6 +17,9 @@ try:
     init_timer_enet = int(dict_init['init_timer_enet'])
     init_timer_space = int(dict_init['init_timer_space'])
     init_space = int(dict_init['init_space'])
+    wifi_default_name = str(dict_init['wifi_default_name'])
+    wifi_4g_name = str(dict_init['wifi_4g_name'])
+    wifi_pass = str(dict_init['wifi_pass'])
 except:
     init_timer_enet = 180
     init_timer_space = 18000
@@ -31,7 +34,7 @@ net_sta = False
 
 
 def get_speed_net():
-    global get_speed, LAN_to_wifi, wifi_sta, wifi_driver, net_sta, init_timer_enet
+    global get_speed, LAN_to_wifi, wifi_sta, wifi_driver, net_sta, init_timer_enet, wifi_name, wifi_pass
     while (True):
         try:
             p = subprocess.run(["curl", "-I", "https://linuxhint.com/"],
@@ -48,33 +51,70 @@ def get_speed_net():
                 LAN_to_wifi = False
                 wifi_sta = False
                 time.sleep(10)
-            print('Internet is good')
-            time.sleep(init_timer_enet)
+            print('Internet is good: Speed '+ str(get_speed) + 'Mbit/s')
+            # time.sleep(init_timer_enet)
         except Exception:
-            if (wifi_sta == False):
+            try:
+                # Turn on wifi (=> Also check driver)
+                subprocess.run("nmcli radio wifi on",
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+                time.sleep(5)
+                # Connect to ssid and password
+                password = r'{}'.format(wifi_pass)
                 try:
-                    wifi_on = subprocess.run("nmcli radio wifi on",
-                                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-                    LAN_to_wifi = True
-                    wifi_sta = True
-                    time.sleep(10)
+                    output = subprocess.check_output(
+                        ['nmcli d wifi connect "{wifi_default_name}" password "{password}"'.format(
+                            wifi_default_name=wifi_default_name, password=password)],
+                        shell=True
+                    ).decode('utf-8')
+                    if ('successfully activated' in output):
+                        print('Ninja Van Wifi has connected')
+                    time.sleep(15)
+                    try:
+                        subprocess.run(["curl", "-I", "https://linuxhint.com/"],
+                                       stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=1)
+                    except:
+                        try:
+                            output_4g = subprocess.check_output(
+                                ['nmcli d wifi connect "{wifi_4g_name}" password "{password}"'.format(
+                                    wifi_4g_name=wifi_4g_name, password=password)],
+                                shell=True
+                            ).decode('utf-8')
+                            if ('successfully activated' in output_4g):
+                                print('4G Wifi has connected')
+                        except:
+                            print('Error in connecting with 4G')
+                        time.sleep(15)
+                        try:
+                            subprocess.run(["curl", "-I", "https://linuxhint.com/"],
+                                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=1)
+                        except:
+                            print('All network is crash')
                 except:
-                    wifi_driver = False
+                    print('Error in connecting with Ninja Van Wifi')
+
+                LAN_to_wifi = True
+                wifi_sta = True
+            except:
+                print('Error in driver Wifi')
+
 
 def Alarm_free_space():
-    global init_timer_space,init_space
-    while(True):
+    global init_timer_space, init_space
+    while (True):
         p = subprocess.run(["df", "-h"],
-                               stdout=subprocess.PIPE)
+                           stdout=subprocess.PIPE)
         respone_space = p.stdout.decode("utf-8")
-        available_space = respone_space.split('\n')[3].split('       ')[1].split('  ')[2]
-        free_use = available_space.replace('G','')
+        available_space = respone_space.split(
+            '\n')[3].split('       ')[1].split('  ')[2]
+        free_use = available_space.replace('G', '')
         free_use = float(free_use)
-        if(free_use <init_space):
+        if (free_use < init_space):
             print('Disk in Alarm')
         else:
-            print('Still able use')
+            print('Still able in using (Free in use: ' + available_space + ')')
         time.sleep(init_timer_space)
+
 
 thread_check_speed_net = threading.Thread(target=get_speed_net)
 thread_check_speed_net.start()
