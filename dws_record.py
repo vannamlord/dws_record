@@ -143,13 +143,16 @@ def memory_mes_UI(data):
     memory_ui.title('Message from DWS Record')
     memory_ui.attributes('-fullscreen', True)
     memory_ui.configure(background='red')
+    mes_ui_4 = Label(memory_ui, text="               ", font=(
+        'Arial Black', 30, "bold"), background='red')
+    mes_ui_4.pack()
     mes_ui_1 = Label(memory_ui, text=data, font=(
         'Arial Black', 100), background='red')
     mes_ui_1.pack()
     mes_ui_3 = Label(memory_ui, text="               ", font=(
-        'Arial Black', 200, "bold"), background='red')
+        'Arial Black', 175, "bold"), background='red')
     mes_ui_3.pack()
-    mes_ui_2 = Label(memory_ui, text="Refreshing Data", font=(
+    mes_ui_2 = Label(memory_ui, text="Clear Image 1st!", font=(
         'Arial Black', 150, "bold"), background='red')
     mes_ui_2.place(relx=0.5, rely=0.5, anchor=CENTER)
     mes_ui_2.pack()
