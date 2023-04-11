@@ -2,7 +2,14 @@
 import subprocess
 import time
 import threading
+
 from tkinter import *
+
+import datetime
+import psutil
+import os
+import signal
+
 # Read status of Tool on DWS
 ####################################################################################
 try:
@@ -30,6 +37,25 @@ LAN_to_wifi = False
 wifi_driver = True
 wifi_connecting = False
 ####################################################################################
+
+
+def oen_dws():
+    try:
+        p = subprocess.Popen(["ninjavan"])
+    except:
+        print("execute ninjavan err")
+
+
+def close_dws():
+    try:
+        for pid in (process.pid for process in psutil.process_iter() if process.name() == "electron"):
+            os.kill(pid, signal.SIGTERM)
+            for pid in (process.pid for process in psutil.process_iter() if process.name() == "ninjavan"):
+                os.kill(pid, signal.SIGTERM)
+        for pid in (process.pid for process in psutil.process_iter() if process.name() == "node"):
+            os.kill(pid, signal.SIGTERM)
+    except Exception as e:
+        print("close ninjavan err: " + str(datetime.datetime.now()) + ' ', e)
 
 
 def enet_mes_UI(data, sta):
